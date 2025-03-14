@@ -1,5 +1,5 @@
-# This version of website uses react.js, node.js and express.js
-## The live stream is implemented using socketio and allowed user to connect the web outside the local network by using ngrok
+# This version of website uses ___react.js___, ___node.js___ and ___express.js___
+## The live stream is implemented using ___socketio___ and allowed user to connect the web outside the local network by using ___ngrok___
 
 ![web_look](https://github.com/user-attachments/assets/db0c3a0b-20e7-4aa2-8878-187cff6563f9)
 
