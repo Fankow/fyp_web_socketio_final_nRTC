@@ -1,4 +1,4 @@
-### This version of website uses react.js, node.js and express.js
+# This version of website uses react.js, node.js and express.js
 ## The live stream is implemented using socketio and allowed user to connect the web outside the local network by using ngrok
 
 ![web_look](https://github.com/user-attachments/assets/db0c3a0b-20e7-4aa2-8878-187cff6563f9)
