@@ -20,10 +20,10 @@ def disconnect():
     print("Disconnected from server")
 
 # Replace with your ngrok URL after starting ngrok
-sio.connect('http://localhost:3000')  # Update to ngrok URL later
+sio.connect('https://7b25-218-102-205-108.ngrok-free.app')  # Update to ngrok URL later
 
 # Load YOLOv11 model
-model = YOLO("yolov11n.pt")
+model = YOLO("best.pt")
 
 # Initialize camera
 cap = cv2.VideoCapture(0)
