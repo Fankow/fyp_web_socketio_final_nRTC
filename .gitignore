@@ -1,0 +1,4 @@
+backend/serviceAccount.json
+backend/.env
+frontend/build/
+node_modules/

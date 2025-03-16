@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
+import VideoList from "./VideoList";
+import VideoPlayer from "./VideoPlayer";
 import "./App.css";
 
-// Replace with your ngrok URL after starting ngrok
-const socket = io("https://7b25-218-102-205-108.ngrok-free.app"); // Update to ngrok URL later
+// Replace with ngrok URL when running online
+const socket = io("http://localhost:3000");
 
 function App() {
   const [frame, setFrame] = useState("");
+  const [selectedVideo, setSelectedVideo] = useState("");
 
   useEffect(() => {
     socket.on("connect", () => console.log("Connected to server"));
@@ -27,12 +30,19 @@ function App() {
   return (
     <div className="App">
       <h1>Raspberry Pi Live Stream with YOLOv11</h1>
-      <div className="video-container">
-        {frame ? (
-          <img src={frame} alt="Live Feed" className="video-feed" />
-        ) : (
-          <p>Waiting for stream...</p>
-        )}
+      <div className="content">
+        <div className="live-stream">
+          <h2>Live Stream</h2>
+          {frame ? (
+            <img src={frame} alt="Live Feed" className="video-feed" />
+          ) : (
+            <p>Waiting for stream...</p>
+          )}
+        </div>
+        <div className="video-section">
+          <VideoList onVideoSelect={setSelectedVideo} />
+          <VideoPlayer videoUrl={selectedVideo} />
+        </div>
       </div>
     </div>
   );

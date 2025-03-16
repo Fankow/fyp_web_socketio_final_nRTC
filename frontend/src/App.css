@@ -4,14 +4,43 @@
   font-family: Arial, sans-serif;
 }
 
-.video-container {
-  margin-top: 20px;
+.content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.live-stream,
+.video-section {
+  flex: 1;
+  min-width: 300px;
 }
 
 .video-feed {
   max-width: 100%;
   border: 2px solid #ccc;
   border-radius: 5px;
+}
+
+.video-list ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.video-list li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+}
+
+.video-list li:hover {
+  background-color: #f0f0f0;
+}
+
+.video-player {
+  margin-top: 20px;
 }
 
 p {
