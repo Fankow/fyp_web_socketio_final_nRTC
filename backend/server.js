@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // API endpoint to fetch video list from Google Drive
 app.get("/api/videos", async (req, res) => {
-  const folderId = "16gNhmALfjDGkLumAcNAPzHIkvSs1OSi7"; // Replace with your folder ID
+  const folderId = "16gNhmALfjDGkLumAcNAPzHIkvSs1OSi7"; // Replace with your VIDEOS folder ID
   try {
     const response = await drive.files.list({
       q: `'${folderId}' in parents mimeType contains 'video/'`,
