@@ -1,6 +1,6 @@
 import cv2
 import time
-import numpy np
+import numpy as np
 from ultralytics import YOLO
 import threading
 import socketio
@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.INFO,
 logger = logging.getLogger(__name__)
 
 # Create a queue for frames - increased size for smoother streaming
-frame_queue = queue.Queue(maxsize=15)
+frame_queue = queue.Queue(maxsize=10)
 
 # Initialize Socket.IO client with optimized settings
 sio = socketio.Client(reconnection=True, 
@@ -49,7 +49,7 @@ recording = False
 record_lock = threading.Lock()
 video_writer = None
 last_detection_time = 0
-recording_cooldown = 5.0  # seconds to continue recording after object disappears
+recording_cooldown = 3.0  # seconds to continue recording after object disappears
 record_start_time = None
 record_min_duration = 3.0  # minimum recording duration in seconds
 recording_dir = "recordings"
@@ -1079,7 +1079,7 @@ def send_frames_thread():
     frames_sent = 0
     
     # Create rate limiter - set to 5 FPS to prevent overwhelming the server
-    rate_limiter = RateLimiter(max_rate=6)  # Only send up to 6 frames per second
+    rate_limiter = RateLimiter(max_rate=5)  # Only send up to 6 frames per second
     
     logger.info("Send thread started")
     
@@ -1301,7 +1301,7 @@ def capture_frames_thread():
                f"FPS: {actual_fps}, Format: {fourcc_str}")
     
     # Skip frames counter for processing (only process every N frames)
-    skip_frames = 2  # Process every 2nd frame - back to original value
+    skip_frames = 3  # Process every 2nd frame - back to original value
     frame_counter = 0
     
     # For FPS measurement
