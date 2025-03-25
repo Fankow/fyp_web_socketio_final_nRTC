@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import VideoList from "./VideoList";
 import VideoPlayer from "./VideoPlayer";
+import ControlPanel from "./ControlPanel"; // Import the new component
 import "./App.css";
 
 // For ngrok, we need to use the right URL
@@ -78,27 +79,34 @@ function App() {
       </header>
 
       <div className="content">
-        <div className="live-stream">
-          <h2>
-            Live Stream
-            {connected ? (
-              <span className="status connected"> (Connected)</span>
-            ) : (
-              <span className="status disconnected"> (Disconnected)</span>
+        <div className="left-column">
+          <div className="live-stream">
+            <h2>
+              Live Stream
+              {connected ? (
+                <span className="status connected"> (Connected)</span>
+              ) : (
+                <span className="status disconnected"> (Disconnected)</span>
+              )}
+            </h2>
+
+            {connectionError && (
+              <div className="connection-error">{connectionError}</div>
             )}
-          </h2>
 
-          {connectionError && (
-            <div className="connection-error">{connectionError}</div>
-          )}
+            {frame ? (
+              <img src={frame} alt="Live Feed" className="video-feed" />
+            ) : (
+              <div className="waiting-stream">
+                <p>
+                  Waiting for stream{connected ? "..." : " (Not connected)"}
+                </p>
+              </div>
+            )}
+          </div>
 
-          {frame ? (
-            <img src={frame} alt="Live Feed" className="video-feed" />
-          ) : (
-            <div className="waiting-stream">
-              <p>Waiting for stream{connected ? "..." : " (Not connected)"}</p>
-            </div>
-          )}
+          {/* Add Control Panel Component */}
+          <ControlPanel socket={socket} connected={connected} />
         </div>
 
         <div className="video-section">
