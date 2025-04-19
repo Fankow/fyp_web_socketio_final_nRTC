@@ -1,0 +1,101 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+.pnp/
+.pnp.js
+
+# Production build files
+/frontend/build/
+/frontend/dist/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Credentials and tokens
+credentials.json
+token.json
+client_secrets.json
+**/credentials.json
+
+# Logging
+logs/
+*.log
+
+# Video recordings
+recordings/
+*.mp4
+*.avi
+*.mov
+*.h264
+*.mkv
+
+# Image files (except web_look.png)
+*.jpg
+*.jpeg
+*.png
+*.gif
+!web_look.png
+
+# YOLOv11 model files (keep them in repo for now)
+# *.pt
+# *.weights
+# *.pth
+
+# Local development
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+.editorconfig
+Thumbs.db
+
+# Cache files
+.eslintcache
+.cache/
+.parcel-cache/
+
+# Socket.IO temporary files
+.socket.io*/
+
+# Temporary files
+.temp/
+.tmp/
+tmp/
+
+# Operating system files
+.DS_Store
+thumbs.db
+desktop.ini
