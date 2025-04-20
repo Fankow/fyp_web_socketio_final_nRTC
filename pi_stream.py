@@ -533,7 +533,7 @@ def control_ptz_by_object_position(frame, boxes, confidence_threshold=0.65):
     
     # Maximum speed for all PTZ movements
     MAX_SPEED = 0xFF  # 255 (maximum speed in PelcoD protocol)
-    MOVE_DURATION = 1.3  # Duration for each movement
+    MOVE_DURATION = 0.2  # Duration for each movement
     
     # Determine movement direction based on object position
     with ptz_lock:
@@ -733,7 +733,7 @@ def convert_to_web_format(input_path):
         logger.error(f"Error in video conversion: {e}")
         return input_path
 
-# Simplified Google Drive upload function
+# Update the upload_to_drive function
 def upload_to_drive(file_path):
     """Uploads a video file to Google Drive with web format conversion."""
     try:
@@ -742,51 +742,61 @@ def upload_to_drive(file_path):
             logger.error(f"File not found: {file_path}")
             return False
         
-        # Authenticate
-        credentials = service_account.Credentials.from_service_account_file(
-            SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+        # Check if credentials file exists
+        if not os.path.exists(SERVICE_ACCOUNT_FILE):
+            logger.error(f"Credentials file not found: {SERVICE_ACCOUNT_FILE}")
+            return False
         
-        # Optional: Convert to web format first
+        # Convert to web format first
         web_path = convert_to_web_format(file_path)
         upload_path = web_path  # Use the converted file
         
-        # Create the service
-        service = build('drive', 'v3', credentials=credentials)
-        
-        # Upload
-        file_name = os.path.basename(upload_path)
-        file_metadata = {
-            'name': file_name,
-            'parents': [PARENT_FOLDER_ID],
-            'mimeType': 'video/mp4'
-        }
-        
-        media = MediaFileUpload(upload_path, mimetype='video/mp4', resumable=True)
-        
-        logger.info(f"Uploading {file_name} to Google Drive...")
-        file = service.files().create(
-            body=file_metadata,
-            media_body=media,
-            fields='id,name'
-        ).execute()
-        
-        logger.info(f"Successfully uploaded: {file.get('name')} (ID: {file.get('id')})")
-        
-        # Set public permissions
-        permission = {'type': 'anyone', 'role': 'reader'}
-        service.permissions().create(
-            fileId=file.get('id'),
-            body=permission
-        ).execute()
-        
-        # Clean up temp file if needed
-        if web_path != file_path and os.path.exists(web_path):
-            os.remove(web_path)
-        
-        return True
-        
+        try:
+            # Authenticate with explicit file path using absolute path
+            credentials = service_account.Credentials.from_service_account_file(
+                os.path.abspath(SERVICE_ACCOUNT_FILE), scopes=SCOPES)
+            
+            # Create the service with explicit credentials
+            service = build('drive', 'v3', credentials=credentials)
+            
+            # Upload
+            file_name = os.path.basename(upload_path)
+            file_metadata = {
+                'name': file_name,
+                'parents': [PARENT_FOLDER_ID],
+                'mimeType': 'video/mp4'
+            }
+            
+            media = MediaFileUpload(upload_path, mimetype='video/mp4', resumable=True)
+            
+            logger.info(f"Uploading {file_name} to Google Drive...")
+            file = service.files().create(
+                body=file_metadata,
+                media_body=media,
+                fields='id,name'
+            ).execute()
+            
+            logger.info(f"Successfully uploaded: {file.get('name')} (ID: {file.get('id')})")
+            
+            # Set public permissions
+            permission = {'type': 'anyone', 'role': 'reader'}
+            service.permissions().create(
+                fileId=file.get('id'),
+                body=permission
+            ).execute()
+            
+            # Clean up temp file if needed
+            if web_path != file_path and os.path.exists(web_path):
+                os.remove(web_path)
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Authentication/Upload error: {str(e)}")
+            return False
+            
     except Exception as e:
-        logger.error(f"Upload error: {e}")
+        logger.error(f"Upload error: {str(e)}")
         return False
 
 # Upload thread function
@@ -1039,7 +1049,7 @@ def send_frames_thread():
                 )
                 
                 # Encode frame as JPEG with lower quality for faster transmission
-                _, buffer = cv2.imencode('.jpg', local_frame, [cv2.IMWRITE_JPEG_QUALITY, 20])
+                _, buffer = cv2.imencode('.jpg', local_frame, [cv2.IMWRITE_JPEG_QUALITY, 30])
                 frame_base64 = base64.b64encode(buffer).decode('utf-8')
                 
                 # Send the frame through Socket.IO - use simple try/except

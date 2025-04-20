@@ -108,7 +108,7 @@ function ControlPanel({ socket, connected }) {
           onClick={toggleManualMode}
           disabled={!connected || (controlStatus === "manual" && !hasControl)}
         >
-          {manualMode ? "ON" : "OFF"}
+     
         </button>
       </div>
 
